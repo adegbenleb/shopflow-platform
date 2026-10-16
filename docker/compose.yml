@@ -1,0 +1,73 @@
+# ShopFlow Data Platform: local services
+# Start a group with:  docker compose -f docker/compose.yml --profile slice up -d
+# Stop everything:     docker compose -f docker/compose.yml --profile slice down
+# More profiles (streaming, sources, governance) are added in later phases.
+
+name: shopflow
+
+services:
+  postgres:
+    image: postgres:16
+    profiles: ["slice"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-shopflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-shopflow}
+      POSTGRES_DB: ${POSTGRES_DB:-shopflow}
+    # wal_level=logical is needed later for Debezium CDC
+    command: ["postgres", "-c", "wal_level=logical"]
+    ports:
+      - "15432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ../data/raw:/data/raw:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-shopflow}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  airflow:
+    image: apache/airflow:3.1.0-python3.12
+    profiles: ["slice"]
+    command: standalone
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      # Local learning setup only: skip the login screen
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
+    ports:
+      - "18080:8080"
+    volumes:
+      - ../ingestion/dags:/opt/airflow/dags
+      - ../data:/opt/airflow/data
+
+  qdrant:
+    image: qdrant/qdrant:v1.13.0
+    profiles: ["slice"]
+    ports:
+      - "16333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  neo4j:
+    image: neo4j:5.26
+    profiles: ["slice"]
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-shopflow123}
+      NEO4J_server_memory_heap_max__size: 1G
+      NEO4J_server_memory_pagecache_size: 512M
+    ports:
+      - "17474:7474"
+      - "17687:7687"
+    volumes:
+      - neo4j_data:/data
+
+volumes:
+  postgres_data:
+  qdrant_data:
+  neo4j_data:
