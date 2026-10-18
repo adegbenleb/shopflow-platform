@@ -41,12 +41,14 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       # Local learning setup only: skip the login screen
       AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
+      # Shopflow database credentials, same expressions as the postgres service.
+      # Read by load_raw and by the dbt docker target (no fallbacks there).
+      POSTGRES_USER: ${POSTGRES_USER:-shopflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-shopflow}
+      POSTGRES_DB: ${POSTGRES_DB:-shopflow}
       # Used by the load_raw DAG to reach the shopflow database and tenant configs
       SHOPFLOW_PG_HOST: postgres
       SHOPFLOW_PG_PORT: "5432"
-      SHOPFLOW_PG_USER: ${POSTGRES_USER:-shopflow}
-      SHOPFLOW_PG_PASSWORD: ${POSTGRES_PASSWORD:-shopflow}
-      SHOPFLOW_PG_DB: ${POSTGRES_DB:-shopflow}
       SHOPFLOW_TENANTS_DIR: /opt/airflow/tenants
       # Lets DAGs import helper modules (e.g. tenant_config) in every Airflow
       # process, not only the ones that add the dags folder themselves

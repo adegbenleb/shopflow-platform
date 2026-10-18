@@ -23,3 +23,9 @@ tenant-safe, and do not expose raw IDs. Postal codes are cut to a 3-digit area.
 
 ### One pipeline
 canonical_pipeline runs load_raw, then dbt build (all models and tests in dependency order).
+
+### Database credentials
+All containers read POSTGRES_USER, POSTGRES_PASSWORD and POSTGRES_DB from the same
+variables in compose.yml (set in docker/.env). The docker dbt target and the load_raw
+DAG have no fallback, so a missing variable fails loudly instead of using a wrong default.
+The dev dbt target keeps its fallback, because on the Mac convenience matters more.

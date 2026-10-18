@@ -25,12 +25,14 @@ METADATA_COLUMNS = ("_loaded_at", "_source_file")
 
 
 def connect():
+    # Credentials have no fallback: a missing variable raises KeyError right away
+    # instead of silently trying a wrong default password.
     return psycopg2.connect(
         host=os.environ.get("SHOPFLOW_PG_HOST", "postgres"),
         port=int(os.environ.get("SHOPFLOW_PG_PORT", "5432")),
-        user=os.environ.get("SHOPFLOW_PG_USER", "shopflow"),
-        password=os.environ.get("SHOPFLOW_PG_PASSWORD", "shopflow"),
-        dbname=os.environ.get("SHOPFLOW_PG_DB", "shopflow"),
+        user=os.environ["POSTGRES_USER"],
+        password=os.environ["POSTGRES_PASSWORD"],
+        dbname=os.environ["POSTGRES_DB"],
     )
 
 
