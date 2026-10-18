@@ -1,0 +1,12 @@
+shopflow:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      port: 15432
+      user: shopflow
+      password: "{{ env_var('POSTGRES_PASSWORD', 'shopflow') }}"
+      dbname: shopflow
+      schema: analytics
+      threads: 4

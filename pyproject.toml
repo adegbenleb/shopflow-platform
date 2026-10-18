@@ -7,7 +7,9 @@ authors = [
     { name = "Blessing Adegbenle", email = "adegbenleb@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "dbt-postgres>=1.11.0",
+]
 
 [project.scripts]
 shopflow-platform = "shopflow_platform:main"

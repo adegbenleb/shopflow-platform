@@ -78,7 +78,24 @@ services:
     volumes:
       - neo4j_data:/data
 
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    profiles: ["slice"]
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@shopflow.dev
+      PGADMIN_DEFAULT_PASSWORD: shopflow
+    depends_on:
+      - postgres
+    ports:
+      - "18082:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
+      
+
 volumes:
   postgres_data:
   qdrant_data:
   neo4j_data:
+  pgadmin_data:

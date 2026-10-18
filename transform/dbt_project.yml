@@ -1,0 +1,10 @@
+name: shopflow
+version: "1.0.0"
+profile: shopflow
+model-paths: ["models"]
+
+models:
+  shopflow:
+    staging:
+      +materialized: view
+      +schema: staging

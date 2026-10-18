@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: olist
+    schema: raw_olist
+    tables:
+      - name: olist_orders
+      - name: olist_customers

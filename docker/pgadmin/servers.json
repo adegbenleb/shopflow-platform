@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "shopflow",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "shopflow",
+      "Username": "shopflow",
+      "SSLMode": "prefer"
+    }
+  }
+}
