@@ -40,11 +40,22 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       # Local learning setup only: skip the login screen
       AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
+      # Used by the load_raw DAG to reach the shopflow database and tenant configs
+      SHOPFLOW_PG_HOST: postgres
+      SHOPFLOW_PG_PORT: "5432"
+      SHOPFLOW_PG_USER: ${POSTGRES_USER:-shopflow}
+      SHOPFLOW_PG_PASSWORD: ${POSTGRES_PASSWORD:-shopflow}
+      SHOPFLOW_PG_DB: ${POSTGRES_DB:-shopflow}
+      SHOPFLOW_TENANTS_DIR: /opt/airflow/tenants
+      # Lets DAGs import helper modules (e.g. tenant_config) in every Airflow
+      # process, not only the ones that add the dags folder themselves
+      PYTHONPATH: /opt/airflow/dags
     ports:
       - "18080:8080"
     volumes:
       - ../ingestion/dags:/opt/airflow/dags
       - ../data:/opt/airflow/data
+      - ../tenants:/opt/airflow/tenants:ro
 
   qdrant:
     image: qdrant/qdrant:v1.13.0

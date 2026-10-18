@@ -1,0 +1,2 @@
+# Helper modules, not DAGs: skip them when Airflow scans this folder for DAGs.
+tenant_config\.py
