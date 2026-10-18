@@ -8,7 +8,8 @@ The sister repo `shopflow-brain` (the AI layer) reads only the gold tables from 
 ## Structure
 - `docker/compose.yml`: local services, grouped by profile (`slice` for now)
 - `docker/postgres/init.sql`: creates the Airflow metadata database
-- `ingestion/dags/`: Airflow DAGs
+- `ingestion/dags/`: Airflow DAGs, plus plain helper modules they import
+- `tenants/`: one YAML file per tenant (source folders, target raw schema)
 - `data/raw/`: Kaggle CSVs (olist, marketing_funnel). Never committed.
 - `tests/`: pytest tests
 
