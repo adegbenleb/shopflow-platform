@@ -10,3 +10,14 @@ shopflow:
       dbname: shopflow
       schema: analytics
       threads: 4
+
+
+    docker:
+      type: postgres
+      host: postgres
+      port: 5432
+      user: shopflow
+      password: "{{ env_var('POSTGRES_PASSWORD', 'shopflow') }}"
+      dbname: shopflow
+      schema: analytics
+      threads: 4

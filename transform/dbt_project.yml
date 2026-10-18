@@ -8,3 +8,6 @@ models:
     staging:
       +materialized: view
       +schema: staging
+    gold:
+      +materialized: table
+      +schema: gold

@@ -4,9 +4,7 @@ models:
   - name: stg_olist__orders
     columns:
       - name: order_id
-        data_tests:
-          - unique
-          - not_null
+        data_tests: [unique, not_null]
       - name: order_customer_id
         data_tests:
           - not_null
@@ -23,9 +21,72 @@ models:
   - name: stg_olist__customers
     columns:
       - name: order_customer_id
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests: [not_null]
+
+  - name: stg_olist__order_items
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__orders')
+                field: order_id
+      - name: product_id
+        data_tests: [not_null]
+      - name: price
+        data_tests: [not_null]
+
+  - name: stg_olist__products
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
+
+  - name: stg_olist__sellers
+    columns:
+      - name: seller_id
+        data_tests: [unique, not_null]
+
+  - name: stg_olist__payments
+    columns:
+      - name: order_id
+        data_tests: [not_null]
+      - name: payment_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
+
+  - name: stg_olist__order_reviews
+    columns:
+      - name: review_id
+        data_tests: [not_null]
+      - name: score
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+
+  - name: stg_olist__geolocation
+    columns:
+      - name: postal_code
+        data_tests: [unique, not_null]
+
+  - name: stg_olist__leads
+    columns:
+      - name: lead_id
+        data_tests: [unique, not_null]
+
+  - name: stg_olist__closed_deals
+    columns:
+      - name: lead_id
         data_tests:
           - unique
           - not_null
-      - name: customer_id
-        data_tests:
-          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__leads')
+                field: lead_id

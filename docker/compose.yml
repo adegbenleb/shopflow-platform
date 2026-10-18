@@ -28,7 +28,8 @@ services:
       retries: 10
 
   airflow:
-    image: apache/airflow:3.1.0-python3.12
+    build: ./airflow
+    image: shopflow-airflow:local
     profiles: ["slice"]
     command: standalone
     depends_on:
@@ -56,6 +57,7 @@ services:
       - ../ingestion/dags:/opt/airflow/dags
       - ../data:/opt/airflow/data
       - ../tenants:/opt/airflow/tenants:ro
+      - ../transform:/opt/airflow/transform
 
   qdrant:
     image: qdrant/qdrant:v1.13.0
