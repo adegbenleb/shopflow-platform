@@ -1,0 +1,9 @@
+# Tenant: olist
+# One YAML file per tenant. The load_raw DAG picks up every *.yml file in tenants/.
+# Paths are as seen from inside the Airflow container (../data is mounted at /opt/airflow/data).
+
+tenant: olist
+target_schema: raw_olist
+sources:
+  - /opt/airflow/data/raw/olist
+  - /opt/airflow/data/raw/marketing_funnel

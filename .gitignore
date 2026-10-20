@@ -14,3 +14,7 @@ data/
 __pycache__/
 *.duckdb
 .DS_Store
+
+# dbt build output (regenerated on every run)
+transform/target/
+transform/logs/

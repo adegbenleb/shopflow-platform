@@ -7,7 +7,9 @@ authors = [
     { name = "Blessing Adegbenle", email = "adegbenleb@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "dbt-postgres>=1.11.0",
+]
 
 [project.scripts]
 shopflow-platform = "shopflow_platform:main"
@@ -19,5 +21,10 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",
+    "pyyaml>=6.0.2",
     "ruff>=0.17.1",
 ]
+
+[tool.pytest.ini_options]
+# The DAG helper modules live in ingestion/dags (Airflow puts that folder on sys.path).
+pythonpath = ["ingestion/dags"]
