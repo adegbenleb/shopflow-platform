@@ -16,7 +16,7 @@ services:
     # wal_level=logical is needed later for Debezium CDC
     command: ["postgres", "-c", "wal_level=logical"]
     ports:
-      - "15432:5432"
+      - "127.0.0.1:15432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -54,7 +54,7 @@ services:
       # process, not only the ones that add the dags folder themselves
       PYTHONPATH: /opt/airflow/dags
     ports:
-      - "18080:8080"
+      - "127.0.0.1:18080:8080"
     volumes:
       - ../ingestion/dags:/opt/airflow/dags
       - ../data:/opt/airflow/data
@@ -65,7 +65,7 @@ services:
     image: qdrant/qdrant:v1.13.0
     profiles: ["slice"]
     ports:
-      - "16333:6333"
+      - "127.0.0.1:16333:6333"
     volumes:
       - qdrant_data:/qdrant/storage
 
@@ -77,8 +77,8 @@ services:
       NEO4J_server_memory_heap_max__size: 1G
       NEO4J_server_memory_pagecache_size: 512M
     ports:
-      - "17474:7474"
-      - "17687:7687"
+      - "127.0.0.1:17474:7474"
+      - "127.0.0.1:17687:7687"
     volumes:
       - neo4j_data:/data
 
@@ -92,7 +92,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - "18082:80"
+      - "127.0.0.1:18082:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
       - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
